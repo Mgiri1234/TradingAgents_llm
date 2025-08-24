@@ -27,12 +27,13 @@ def get_finnhub_news(
     """
     Retrieve news about a company within a time frame
 
-    Args
-        ticker (str): ticker for the company you are interested in
-        start_date (str): Start date in yyyy-mm-dd format
-        end_date (str): End date in yyyy-mm-dd format
-    Returns
-        str: dataframe containing the news of the company in the time frame
+    Args:
+        ticker (str): ticker symbol for the company
+        curr_date (str): current date in yyyy-mm-dd format
+        look_back_days (int): number of days to look back from curr_date
+
+    Returns:
+        str: formatted string summarizing the company's news in the time frame
 
     """
 
