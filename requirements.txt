@@ -24,3 +24,7 @@ rich
 questionary
 langchain_anthropic
 langchain-google-genai
+
+# Optional dependencies for running local models
+transformers; extra == "local"
+llama-cpp-python; extra == "local"
