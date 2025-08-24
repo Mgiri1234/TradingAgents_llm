@@ -112,6 +112,11 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
+Install with optional dependencies for local `transformers` or `llama-cpp-python` support:
+```bash
+pip install tradingagents[local]
+```
+
 ### Required APIs
 
 You will also need the FinnHub API for financial data. All of our code is implemented with the free tier.

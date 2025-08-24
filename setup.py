@@ -26,6 +26,12 @@ setup(
         "rich>=13.0.0",
         "questionary>=2.0.1",
     ],
+    extras_require={
+        "local": [
+            "transformers",
+            "llama-cpp-python",
+        ],
+    },
     python_requires=">=3.10",
     entry_points={
         "console_scripts": [
