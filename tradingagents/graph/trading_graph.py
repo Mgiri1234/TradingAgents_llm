@@ -3,8 +3,7 @@
 import os
 from pathlib import Path
 import json
-from datetime import date
-from typing import Dict, Any, Tuple, List, Optional
+from typing import Dict, Any, List, Optional
 
 from langchain_openai import ChatOpenAI
 from langchain_anthropic import ChatAnthropic
@@ -12,14 +11,9 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 
 from langgraph.prebuilt import ToolNode
 
-from tradingagents.agents import *
+from tradingagents.agents import Toolkit
 from tradingagents.default_config import DEFAULT_CONFIG
 from tradingagents.agents.utils.memory import FinancialSituationMemory
-from tradingagents.agents.utils.agent_states import (
-    AgentState,
-    InvestDebateState,
-    RiskDebateState,
-)
 from tradingagents.dataflows.interface import set_config
 
 from .conditional_logic import ConditionalLogic
@@ -34,7 +28,7 @@ class TradingAgentsGraph:
 
     def __init__(
         self,
-        selected_analysts=["market", "social", "news", "fundamentals"],
+        selected_analysts: Optional[List[str]] = None,
         debug=False,
         config: Dict[str, Any] = None,
     ):
@@ -45,6 +39,8 @@ class TradingAgentsGraph:
             debug: Whether to run in debug mode
             config: Configuration dictionary. If None, uses default config
         """
+        selected_analysts = selected_analysts or ["market", "social", "news", "fundamentals"]
+
         self.debug = debug
         self.config = config or DEFAULT_CONFIG
 
