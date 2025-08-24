@@ -119,9 +119,43 @@ You will also need the FinnHub API for financial data. All of our code is implem
 export FINNHUB_API_KEY=$YOUR_FINNHUB_API_KEY
 ```
 
-You will need the OpenAI API for all the agents.
+You will need an LLM API key for the agents. TradingAgents works with several providers:
+
+#### OpenAI (default)
 ```bash
 export OPENAI_API_KEY=$YOUR_OPENAI_API_KEY
+```
+
+#### OpenRouter
+```bash
+export OPENAI_API_KEY=$OPENROUTER_API_KEY
+```
+Configure TradingAgents to use OpenRouter:
+
+```python
+from tradingagents.default_config import DEFAULT_CONFIG
+
+config = DEFAULT_CONFIG.copy()
+config["llm_provider"] = "openrouter"
+config["backend_url"] = "https://openrouter.ai/api/v1"
+config["deep_think_llm"] = "anthropic/claude-3.5-sonnet"
+config["quick_think_llm"] = "openai/gpt-4o-mini"
+```
+
+#### Local Ollama
+```bash
+export OPENAI_API_KEY=dummy
+```
+Configure TradingAgents to use a local Ollama server:
+
+```python
+from tradingagents.default_config import DEFAULT_CONFIG
+
+config = DEFAULT_CONFIG.copy()
+config["llm_provider"] = "ollama"
+config["backend_url"] = "http://localhost:11434/v1"
+config["deep_think_llm"] = "llama3"
+config["quick_think_llm"] = "phi3"
 ```
 
 ### CLI Usage
