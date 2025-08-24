@@ -1,3 +1,4 @@
+import os
 import questionary
 from typing import List, Optional, Tuple, Dict
 
@@ -9,6 +10,26 @@ ANALYST_ORDER = [
     ("News Analyst", AnalystType.NEWS),
     ("Fundamentals Analyst", AnalystType.FUNDAMENTALS),
 ]
+
+
+def _ensure_api_key(provider: str) -> None:
+    """
+    Ensure an API key is available for the selected provider.
+
+    Warn users if an OpenAI key is missing and set a placeholder key for Ollama.
+    """
+    provider = provider.lower()
+    if provider == "openai":
+        if not os.getenv("OPENAI_API_KEY"):
+            console.print(
+                "[yellow]Warning: OPENAI_API_KEY is not set. Requests to OpenAI will fail without it.[/yellow]"
+            )
+    elif provider == "ollama":
+        if not os.getenv("OPENAI_API_KEY"):
+            os.environ["OPENAI_API_KEY"] = "ollama"
+            console.print(
+                "[green]Ollama selected. No API key required; using placeholder OPENAI_API_KEY.[/green]"
+            )
 
 
 def get_ticker() -> str:
@@ -124,6 +145,7 @@ def select_research_depth() -> int:
 
 def select_shallow_thinking_agent(provider) -> str:
     """Select shallow thinking llm engine using an interactive selection."""
+    _ensure_api_key(provider)
 
     # Define shallow thinking llm engine options with their corresponding model names
     SHALLOW_AGENT_OPTIONS = {
@@ -182,6 +204,7 @@ def select_shallow_thinking_agent(provider) -> str:
 
 def select_deep_thinking_agent(provider) -> str:
     """Select deep thinking llm engine using an interactive selection."""
+    _ensure_api_key(provider)
 
     # Define deep thinking llm engine options with their corresponding model names
     DEEP_AGENT_OPTIONS = {
@@ -256,7 +279,11 @@ def select_llm_provider() -> tuple[str, str]:
             questionary.Choice(display, value=(display, value))
             for display, value in BASE_URLS
         ],
-        instruction="\n- Use arrow keys to navigate\n- Press Enter to select",
+        instruction=(
+            "\nProviders requiring API keys: OpenAI, Anthropic, Google, Openrouter"
+            "\nFree/local: Ollama"
+            "\n- Use arrow keys to navigate\n- Press Enter to select"
+        ),
         style=questionary.Style(
             [
                 ("selected", "fg:magenta noinherit"),
@@ -271,6 +298,7 @@ def select_llm_provider() -> tuple[str, str]:
         exit(1)
     
     display_name, url = choice
+    _ensure_api_key(display_name)
     print(f"You selected: {display_name}\tURL: {url}")
-    
+
     return display_name, url
